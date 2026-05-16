@@ -16,7 +16,7 @@ const features = [
 export default function LandingPage() {
   const { signInGoogle } = useAuth();
   const { showToast }    = useToast();
-  const [isSigningIn, setIsSigningIn] = useState(false); // Add this state
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const heroRef   = useRef<HTMLDivElement>(null);
   const featRef   = useRef<HTMLDivElement>(null);
 
@@ -81,17 +81,7 @@ export default function LandingPage() {
           </div>
           <span className="text-lg font-bold tracking-tight text-text">PingNexa</span>
         </div>
-        <button
-          onClick={handleSignIn}
-          disabled={isSigningIn}
-          className={`text-sm font-medium transition-colors ${
-            isSigningIn 
-              ? "text-text-muted/50 cursor-not-allowed" 
-              : "text-text-muted hover:text-text"
-          }`}
-        >
-          {isSigningIn ? "Signing in..." : "Sign in →"}
-        </button>
+        {/* Sign in button removed from here */}
       </nav>
 
       {/* Hero */}
