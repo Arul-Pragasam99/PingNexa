@@ -157,7 +157,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-6 text-center text-xs text-text-muted">
-        PingNexa — open & free · Built with Next.js + Firebase
+        PingNexa — open & free
       </footer>
     </main>
   );
