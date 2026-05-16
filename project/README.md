@@ -1,4 +1,4 @@
-# RenderPing 📡
+# PingNexa 📡
 
 > Smart uptime monitoring — keeps your Render (and any free-tier) apps from sleeping.
 

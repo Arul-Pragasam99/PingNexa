@@ -1,6 +1,6 @@
 "use client";
 // components/layout/LandingPage.tsx
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Activity, Zap, Shield, Clock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -16,6 +16,7 @@ const features = [
 export default function LandingPage() {
   const { signInGoogle } = useAuth();
   const { showToast }    = useToast();
+  const [isSigningIn, setIsSigningIn] = useState(false); // Add this state
   const heroRef   = useRef<HTMLDivElement>(null);
   const featRef   = useRef<HTMLDivElement>(null);
 
@@ -38,8 +39,27 @@ export default function LandingPage() {
   }, []);
 
   const handleSignIn = async () => {
-    try { await signInGoogle(); }
-    catch { showToast("Sign-in failed. Try again.", "error"); }
+    // Prevent multiple sign-in attempts
+    if (isSigningIn) {
+      console.log("Sign in already in progress");
+      return;
+    }
+
+    setIsSigningIn(true);
+    try { 
+      await signInGoogle(); 
+      showToast("Welcome to PingNexa! 🎉", "success");
+    } catch (error: any) {
+      if (error?.code === 'auth/popup-blocked') {
+        showToast("Popup blocked! Please allow popups for this site.", "error");
+      } else if (error?.code === 'auth/popup-closed-by-user') {
+        showToast("Sign in cancelled. Try again!", "info");
+      } else {
+        showToast("Sign-in failed. Try again.", "error");
+      }
+    } finally {
+      setIsSigningIn(false);
+    }
   };
 
   return (
@@ -59,13 +79,18 @@ export default function LandingPage() {
               <Activity className="w-4 h-4 text-accent" />
             </div>
           </div>
-          <span className="text-lg font-bold tracking-tight text-text">RenderPing</span>
+          <span className="text-lg font-bold tracking-tight text-text">PingNexa</span>
         </div>
         <button
           onClick={handleSignIn}
-          className="text-sm font-medium text-text-muted hover:text-text transition-colors"
+          disabled={isSigningIn}
+          className={`text-sm font-medium transition-colors ${
+            isSigningIn 
+              ? "text-text-muted/50 cursor-not-allowed" 
+              : "text-text-muted hover:text-text"
+          }`}
         >
-          Sign in →
+          {isSigningIn ? "Signing in..." : "Sign in →"}
         </button>
       </nav>
 
@@ -85,17 +110,22 @@ export default function LandingPage() {
         </h1>
 
         <p className="hero-item text-lg text-text-muted max-w-xl mb-10 leading-relaxed">
-          RenderPing pings your free-tier sites on a custom schedule — so they never
+          PingNexa pings your free-tier sites on a custom schedule — so they never
           go to sleep when you need them most.
         </p>
 
         <div className="hero-item flex flex-col sm:flex-row gap-4">
           <button
             onClick={handleSignIn}
-            className="group flex items-center gap-3 px-8 py-4 bg-accent text-bg rounded-xl font-bold text-sm tracking-wide hover:bg-accent-dim transition-all shadow-accent"
+            disabled={isSigningIn}
+            className={`group flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-accent ${
+              isSigningIn
+                ? "bg-accent/50 text-bg/50 cursor-not-allowed"
+                : "bg-accent text-bg hover:bg-accent-dim"
+            }`}
           >
             <svg className="w-5 h-5" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="m6.306 14.691 6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303a12.04 12.04 0 0 1-4.087 5.571l.003-.002 6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg>
-            Continue with Google
+            {isSigningIn ? "Signing in..." : "Continue with Google"}
           </button>
         </div>
 
@@ -127,7 +157,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-6 text-center text-xs text-text-muted">
-        RenderPing — open & free · Built with Next.js + Firebase
+        PingNexa — open & free · Built with Next.js + Firebase
       </footer>
     </main>
   );

@@ -19,11 +19,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title:       "RenderPing — Keep Your Sites Alive",
+  title:       "PingNexa — Keep Your Sites Alive",
   description: "Smart uptime monitoring that pings your Render (and any) free-tier apps so they never sleep.",
   keywords:    ["uptime monitor", "render.com", "ping", "free tier", "site monitor"],
   openGraph: {
-    title:       "RenderPing",
+    title:       "PingNexa",
     description: "Keep your Render apps awake with intelligent pinging.",
     type:        "website",
   },

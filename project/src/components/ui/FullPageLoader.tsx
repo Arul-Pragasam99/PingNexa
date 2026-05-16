@@ -12,7 +12,7 @@ export default function FullPageLoader() {
           </div>
           <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-accent animate-ping" />
         </div>
-        <p className="text-text-muted text-sm font-mono">Loading RenderPing…</p>
+        <p className="text-text-muted text-sm font-mono">Loading PingNexa…</p>
       </div>
     </div>
   );

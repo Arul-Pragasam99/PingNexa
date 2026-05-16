@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     const res = await fetch(parsed.toString(), {
       method:  "HEAD", // lightweight — only checks server responds
       signal:  controller.signal,
-      headers: { "User-Agent": "RenderPing/1.0 (uptime monitor)" },
+      headers: { "User-Agent": "PingNexa/1.0 (uptime monitor)" },
       redirect: "follow",
     });
 

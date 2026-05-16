@@ -1,6 +1,6 @@
 "use client";
 // context/AuthContext.tsx
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut, User } from "firebase/auth";
 import { auth, provider } from "@/lib/firebase";
 import { upsertUser, getUser } from "@/lib/firestore";
@@ -28,16 +28,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user,    setUser]    = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const signInProgress = useRef(false); // Prevent multiple sign-in attempts
 
   const loadProfile = async (u: User) => {
-    await upsertUser({
-      uid:         u.uid,
-      displayName: u.displayName,
-      email:       u.email,
-      photoURL:    u.photoURL,
-    });
-    const p = await getUser(u.uid);
-    setProfile(p);
+    try {
+      await upsertUser({
+        uid:         u.uid,
+        displayName: u.displayName,
+        email:       u.email,
+        photoURL:    u.photoURL,
+      });
+      const p = await getUser(u.uid);
+      setProfile(p);
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    }
   };
 
   useEffect(() => {
@@ -54,14 +59,52 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signInGoogle = async () => {
-    const result = await signInWithPopup(auth, provider);
-    await loadProfile(result.user);
+    // Prevent multiple simultaneous sign-in attempts
+    if (signInProgress.current) {
+      console.log("Sign in already in progress, ignoring...");
+      return;
+    }
+
+    try {
+      signInProgress.current = true;
+      
+      // Sign out first to clear any pending state (prevents the error)
+      if (auth.currentUser) {
+        await signOut(auth);
+      }
+      
+      const result = await signInWithPopup(auth, provider);
+      await loadProfile(result.user);
+    } catch (error: any) {
+      console.error("Sign in error:", error);
+      
+      // Handle popup blocked error
+      if (error.code === 'auth/popup-blocked') {
+        alert("Popup was blocked by your browser. Please allow popups for this site and try again.");
+      } 
+      // Handle popup closed by user
+      else if (error.code === 'auth/popup-closed-by-user') {
+        console.log("Sign in cancelled by user");
+      }
+      // Handle other errors
+      else {
+        console.error("Unexpected sign in error:", error);
+      }
+      
+      throw error;
+    } finally {
+      signInProgress.current = false;
+    }
   };
 
   const signOutUser = async () => {
-    await signOut(auth);
-    setUser(null);
-    setProfile(null);
+    try {
+      await signOut(auth);
+      setUser(null);
+      setProfile(null);
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
   };
 
   const refreshProfile = async () => {

@@ -33,7 +33,7 @@ export default function Navbar({ onMenuClick, onProfileClick }: Props) {
           <div className="w-7 h-7 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center">
             <Activity className="w-3.5 h-3.5 text-accent" />
           </div>
-          <span className="font-bold text-sm hidden sm:block">RenderPing</span>
+          <span className="font-bold text-sm hidden sm:block">PingNexa</span>
         </div>
       </div>
 
