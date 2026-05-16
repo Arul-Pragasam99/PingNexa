@@ -19,6 +19,7 @@ export default function LandingPage() {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const heroRef   = useRef<HTMLDivElement>(null);
   const featRef   = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -35,7 +36,14 @@ export default function LandingPage() {
         { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power3.out", delay: 0.9 }
       );
     });
-    return () => ctx.revert();
+    
+    // Cleanup on unmount
+    return () => {
+      ctx.revert();
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, []);
 
   const handleSignIn = async () => {
@@ -46,19 +54,57 @@ export default function LandingPage() {
     }
 
     setIsSigningIn(true);
+    
+    // Track if sign in completed
+    let signInCompleted = false;
+    
+    // Simple interval to check and reset after 3 seconds if still signing in
+    // This ensures button doesn't stay stuck
+    intervalRef.current = setInterval(() => {
+      if (isSigningIn && !signInCompleted) {
+        console.log("Resetting button after timeout");
+        signInCompleted = true;
+        setIsSigningIn(false);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+      }
+    }, 3000);
+    
     try { 
-      await signInGoogle(); 
+      await signInGoogle();
+      // Sign in successful
+      signInCompleted = true;
+      setIsSigningIn(false);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
       showToast("Welcome to PingNexa! 🎉", "success");
     } catch (error: any) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      
       if (error?.code === 'auth/popup-blocked') {
         showToast("Popup blocked! Please allow popups for this site.", "error");
+        setIsSigningIn(false);
+        signInCompleted = true;
       } else if (error?.code === 'auth/popup-closed-by-user') {
+        // Reset immediately when popup is closed
+        setIsSigningIn(false);
+        signInCompleted = true;
+        showToast("Sign in cancelled. Try again!", "info");
+      } else if (error?.code === 'auth/cancelled-popup-request') {
+        // Reset immediately
+        setIsSigningIn(false);
+        signInCompleted = true;
         showToast("Sign in cancelled. Try again!", "info");
       } else {
+        console.error("Sign in error:", error);
         showToast("Sign-in failed. Try again.", "error");
+        setIsSigningIn(false);
+        signInCompleted = true;
       }
-    } finally {
-      setIsSigningIn(false);
     }
   };
 
@@ -94,7 +140,7 @@ export default function LandingPage() {
         <h1 className="hero-item text-5xl sm:text-7xl font-extrabold tracking-tight leading-none mb-6 max-w-3xl">
           Keep your apps{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-violet">
-            awake
+            alive
           </span>
           .
         </h1>

@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user,    setUser]    = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const signInProgress = useRef(false); // Prevent multiple sign-in attempts
+  const signInProgress = useRef(false);
 
   const loadProfile = async (u: User) => {
     try {
@@ -67,30 +67,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     try {
       signInProgress.current = true;
-      
-      // Sign out first to clear any pending state (prevents the error)
-      if (auth.currentUser) {
-        await signOut(auth);
-      }
-      
       const result = await signInWithPopup(auth, provider);
       await loadProfile(result.user);
     } catch (error: any) {
-      console.error("Sign in error:", error);
-      
-      // Handle popup blocked error
-      if (error.code === 'auth/popup-blocked') {
-        alert("Popup was blocked by your browser. Please allow popups for this site and try again.");
-      } 
-      // Handle popup closed by user
-      else if (error.code === 'auth/popup-closed-by-user') {
-        console.log("Sign in cancelled by user");
+      // Don't re-throw popup-closed-by-user errors - just return silently
+      if (error?.code === 'auth/popup-closed-by-user') {
+        // Silently return, no error thrown
+        return;
       }
-      // Handle other errors
-      else {
-        console.error("Unexpected sign in error:", error);
-      }
-      
+      // Re-throw other errors
       throw error;
     } finally {
       signInProgress.current = false;
