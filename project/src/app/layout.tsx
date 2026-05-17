@@ -6,6 +6,7 @@ import { AuthProvider }     from "@/context/AuthContext";
 import { ToastProvider }    from "@/context/ToastContext";
 import { MonitorsProvider } from "@/context/MonitorsContext";
 import ToastContainer       from "@/components/ui/ToastContainer";
+import RegisterSW           from "@/components/pwa/RegisterSW";
 
 const syne = Syne({
   subsets:  ["latin"],
@@ -36,11 +37,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${syne.variable} ${geistMono.variable}`}
       suppressHydrationWarning  // Add this line
     >
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0ea5a4" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+      </head>
       <body className="font-sans bg-bg text-text antialiased">
         <ToastProvider>
           <AuthProvider>
             <MonitorsProvider>
               {children}
+              <RegisterSW />
               <ToastContainer />
             </MonitorsProvider>
           </AuthProvider>

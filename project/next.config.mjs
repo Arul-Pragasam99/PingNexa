@@ -1,3 +1,4 @@
+import withPWA from 'next-pwa';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -8,6 +9,8 @@ const nextConfig = {
   },
   // Turbopack configuration for Next.js 16
   turbopack: {
+    // Set the Turbopack root to the current working directory (absolute at runtime)
+    root: process.cwd(),
     resolveAlias: {
       // Helps with file watching on Windows
     },
@@ -24,4 +27,10 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+const pwaOptions = {
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+};
+
+export default withPWA(pwaOptions)(nextConfig);
