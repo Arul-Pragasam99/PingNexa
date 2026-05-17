@@ -1,5 +1,5 @@
 "use client";
-// components/layout/LandingPage.tsx - OPTION 3: Grid with Ripples
+// components/layout/LandingPage.tsx - Enhanced Motion Effects (No Grid)
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Activity, Zap, Shield, Clock } from "lucide-react";
@@ -22,7 +22,7 @@ export default function LandingPage() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // ========== OPTION 3: FLOATING GRID WITH RIPPLES ==========
+  // ========== ENHANCED MOTION EFFECTS (NO GRID) ==========
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -31,83 +31,124 @@ export default function LandingPage() {
 
     let animationId: number;
     let time = 0;
-    let mouseX = -1000, mouseY = -1000;
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      setTimeout(() => {
-        mouseX = -1000;
-        mouseY = -1000;
-      }, 500);
-    };
+    let particles: Array<{
+      x: number;
+      y: number;
+      size: number;
+      speedX: number;
+      speedY: number;
+      opacity: number;
+    }> = [];
     
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      
+      // Initialize particles on resize
+      particles = [];
+      const particleCount = Math.min(80, Math.floor(window.innerWidth * window.innerHeight / 15000));
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2 + 1,
+          speedX: (Math.random() - 0.5) * 0.3,
+          speedY: (Math.random() - 0.5) * 0.3,
+          opacity: Math.random() * 0.3 + 0.1,
+        });
+      }
     };
     
     const draw = () => {
       if (!ctx || !canvas) return;
-      time += 0.008;
+      time += 0.005;
       
       const w = canvas.width;
       const h = canvas.height;
       
-      ctx.fillStyle = "rgba(10, 10, 15, 0.95)";
+      // Clear with gradient background
+      const gradient = ctx.createLinearGradient(0, 0, w, h);
+      gradient.addColorStop(0, "rgba(10, 10, 15, 0.95)");
+      gradient.addColorStop(1, "rgba(5, 5, 10, 0.98)");
+      ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
       
-      // Draw grid
-      const step = 50;
-      ctx.beginPath();
-      ctx.strokeStyle = "rgba(168, 85, 247, 0.15)";
-      ctx.lineWidth = 0.5;
-      
-      for (let x = 0; x < w; x += step) {
+      // Draw floating particles
+      particles.forEach(particle => {
         ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
-      }
-      for (let y = 0; y < h; y += step) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-      
-      // Animated wave on grid
-      for (let x = 0; x < w; x += 10) {
-        const y = h * 0.5 + Math.sin(x * 0.01 + time) * 30 + Math.cos(x * 0.02 + time * 1.3) * 15;
-        ctx.fillStyle = "rgba(168, 85, 247, 0.08)";
-        ctx.beginPath();
-        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(168, 85, 247, ${particle.opacity * (0.5 + Math.sin(time * 2 + particle.x) * 0.3)})`;
         ctx.fill();
-      }
+        
+        // Update particle position
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        
+        // Wrap around screen
+        if (particle.x < 0) particle.x = w;
+        if (particle.x > w) particle.x = 0;
+        if (particle.y < 0) particle.y = h;
+        if (particle.y > h) particle.y = 0;
+      });
       
-      // Mouse ripple effect
-      if (mouseX > 0 && mouseX < w && mouseY > 0 && mouseY < h) {
-        const rippleRadius = 60;
-        const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, rippleRadius);
-        grad.addColorStop(0, "rgba(168, 85, 247, 0.2)");
+      // Draw animated floating orbs
+      for (let i = 0; i < 5; i++) {
+        const angle = time * 0.5 + i * Math.PI * 2 / 5;
+        const x = w * 0.5 + Math.sin(angle) * (w * 0.3);
+        const y = h * 0.5 + Math.cos(angle * 0.7) * (h * 0.2);
+        const radius = Math.sin(time * 0.8 + i) * 30 + 50;
+        
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        grad.addColorStop(0, `rgba(168, 85, 247, ${0.05 + Math.sin(time + i) * 0.02})`);
         grad.addColorStop(1, "rgba(168, 85, 247, 0)");
         ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, rippleRadius, 0, Math.PI * 2);
         ctx.fill();
+      }
+      
+      // Draw animated wave lines (replacing grid)
+      ctx.beginPath();
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        const yOffset = h * (0.3 + i * 0.2);
+        for (let x = 0; x < w; x += 20) {
+          const y = yOffset + Math.sin(x * 0.01 + time * 1.5 + i * 2) * 30 + Math.cos(x * 0.02 + time * 0.8) * 15;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `rgba(168, 85, 247, ${0.08 + Math.sin(time + i) * 0.03})`;
+        ctx.stroke();
+      }
+      
+      // Draw connecting lines between nearby particles
+      ctx.beginPath();
+      ctx.lineWidth = 0.3;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(168, 85, 247, ${0.03 * (1 - distance / 100)})`;
+            ctx.stroke();
+          }
+        }
       }
       
       animationId = requestAnimationFrame(draw);
     };
     
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
     resize();
     draw();
     
     return () => {
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationId);
     };
   }, []);
@@ -190,7 +231,7 @@ export default function LandingPage() {
       <div className="absolute inset-0 bg-gradient-to-b from-bg/80 via-bg/40 to-bg/90 pointer-events-none z-0" />
       <div className="absolute inset-0 bg-radial-glow pointer-events-none z-0" />
       <div className="absolute top-20 left-1/4 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '8s' }} />
-      <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] rounded-full bg-violet/5 blur-[100px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
+      <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] rounded-full bg-accent/5 blur-[100px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
 
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-border/50 backdrop-blur-sm bg-bg/30">
         <div className="flex items-center gap-3">
@@ -211,7 +252,7 @@ export default function LandingPage() {
 
         <h1 className="hero-item text-5xl sm:text-7xl font-extrabold tracking-tight leading-none mb-6 max-w-3xl">
           Keep your apps{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-violet">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-dim animate-gradient-x">
             alive
           </span>
           .
