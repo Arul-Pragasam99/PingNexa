@@ -1,5 +1,5 @@
 "use client";
-// components/layout/LandingPage.tsx
+// components/layout/LandingPage.tsx - OPTION 3: Grid with Ripples
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Activity, Zap, Shield, Clock } from "lucide-react";
@@ -22,7 +22,7 @@ export default function LandingPage() {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // --- Realistic Motion Background: Animated Particles & Flowing Lines ---
+  // ========== OPTION 3: FLOATING GRID WITH RIPPLES ==========
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -30,135 +30,84 @@ export default function LandingPage() {
     if (!ctx) return;
 
     let animationId: number;
-    let particles: Array<{
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      radius: number;
-      alpha: number;
-    }> = [];
-    let lines: Array<{
-      points: { x: number; y: number }[];
-      progress: number;
-      speed: number;
-      color: string;
-    }> = [];
-
+    let time = 0;
+    let mouseX = -1000, mouseY = -1000;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      setTimeout(() => {
+        mouseX = -1000;
+        mouseY = -1000;
+      }, 500);
+    };
+    
     const resize = () => {
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      canvas.width = w;
-      canvas.height = h;
-      initParticles();
-      initLines();
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
-
-    const initParticles = () => {
-      const w = canvas.width;
-      const h = canvas.height;
-      particles = [];
-      const count = Math.min(120, Math.floor((w * h) / 8000));
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * w,
-          y: Math.random() * h,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.2,
-          radius: Math.random() * 2 + 1.2,
-          alpha: Math.random() * 0.25 + 0.1,
-        });
-      }
-    };
-
-    const initLines = () => {
-      const w = canvas.width;
-      const h = canvas.height;
-      lines = [];
-      const lineCount = Math.min(8, Math.floor((w + h) / 300));
-      for (let i = 0; i < lineCount; i++) {
-        const startX = Math.random() * w;
-        const startY = Math.random() * h;
-        const endX = Math.random() * w;
-        const endY = Math.random() * h;
-        const cp1x = startX + (Math.random() - 0.5) * 300;
-        const cp1y = startY + (Math.random() - 0.5) * 200;
-        const cp2x = endX + (Math.random() - 0.5) * 300;
-        const cp2y = endY + (Math.random() - 0.5) * 200;
-
-        const points: { x: number; y: number }[] = [];
-        for (let t = 0; t <= 1; t += 0.02) {
-          const x = Math.pow(1 - t, 3) * startX +
-                    3 * Math.pow(1 - t, 2) * t * cp1x +
-                    3 * (1 - t) * Math.pow(t, 2) * cp2x +
-                    Math.pow(t, 3) * endX;
-          const y = Math.pow(1 - t, 3) * startY +
-                    3 * Math.pow(1 - t, 2) * t * cp1y +
-                    3 * (1 - t) * Math.pow(t, 2) * cp2y +
-                    Math.pow(t, 3) * endY;
-          points.push({ x, y });
-        }
-        lines.push({
-          points,
-          progress: Math.random(),
-          speed: 0.002 + Math.random() * 0.005,
-          color: `rgba(168, 85, 247, ${0.08 + Math.random() * 0.1})`,
-        });
-      }
-    };
-
+    
     const draw = () => {
       if (!ctx || !canvas) return;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw flowing lines
-      for (const line of lines) {
-        line.progress += line.speed;
-        if (line.progress > 1) line.progress = 0;
-        const segmentCount = Math.floor(line.points.length * line.progress);
-        if (segmentCount > 1) {
-          ctx.beginPath();
-          ctx.moveTo(line.points[0].x, line.points[0].y);
-          for (let i = 1; i < segmentCount; i++) {
-            ctx.lineTo(line.points[i].x, line.points[i].y);
-          }
-          ctx.strokeStyle = line.color;
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // Draw a glow at the head
-          const head = line.points[segmentCount - 1];
-          ctx.beginPath();
-          ctx.arc(head.x, head.y, 2, 0, Math.PI * 2);
-          ctx.fillStyle = line.color.replace('0.08', '0.3');
-          ctx.fill();
-        }
-      }
-
-      // Draw drifting particles
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < -50) p.x = canvas.width + 50;
-        if (p.x > canvas.width + 50) p.x = -50;
-        if (p.y < -50) p.y = canvas.height + 50;
-        if (p.y > canvas.height + 50) p.y = -50;
-
+      time += 0.008;
+      
+      const w = canvas.width;
+      const h = canvas.height;
+      
+      ctx.fillStyle = "rgba(10, 10, 15, 0.95)";
+      ctx.fillRect(0, 0, w, h);
+      
+      // Draw grid
+      const step = 50;
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(168, 85, 247, 0.15)";
+      ctx.lineWidth = 0.5;
+      
+      for (let x = 0; x < w; x += step) {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(168, 85, 247, ${p.alpha * 0.6})`;
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+      
+      // Animated wave on grid
+      for (let x = 0; x < w; x += 10) {
+        const y = h * 0.5 + Math.sin(x * 0.01 + time) * 30 + Math.cos(x * 0.02 + time * 1.3) * 15;
+        ctx.fillStyle = "rgba(168, 85, 247, 0.08)";
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
         ctx.fill();
       }
-
+      
+      // Mouse ripple effect
+      if (mouseX > 0 && mouseX < w && mouseY > 0 && mouseY < h) {
+        const rippleRadius = 60;
+        const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, rippleRadius);
+        grad.addColorStop(0, "rgba(168, 85, 247, 0.2)");
+        grad.addColorStop(1, "rgba(168, 85, 247, 0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, rippleRadius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      
       animationId = requestAnimationFrame(draw);
     };
-
+    
     window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", handleMouseMove);
     resize();
     draw();
-
+    
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationId);
     };
   }, []);
@@ -237,20 +186,12 @@ export default function LandingPage() {
 
   return (
     <main className="min-h-dvh bg-bg relative overflow-hidden flex flex-col" style={{ fontFamily: "Lato, sans-serif" }}>
-      {/* Canvas Motion Background */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />
-
-      {/* Static gradient overlay for depth */}
       <div className="absolute inset-0 bg-gradient-to-b from-bg/80 via-bg/40 to-bg/90 pointer-events-none z-0" />
-
-      {/* Top radial glow */}
       <div className="absolute inset-0 bg-radial-glow pointer-events-none z-0" />
-
-      {/* Decorative orbs with subtle animation */}
       <div className="absolute top-20 left-1/4 w-[600px] h-[600px] rounded-full bg-accent/5 blur-[120px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '8s' }} />
       <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] rounded-full bg-violet/5 blur-[100px] pointer-events-none z-0 animate-pulse" style={{ animationDuration: '12s', animationDelay: '2s' }} />
 
-      {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-8 py-6 border-b border-border/50 backdrop-blur-sm bg-bg/30">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -262,7 +203,6 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero */}
       <section ref={heroRef} className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-24">
         <div className="hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-mono mb-8 backdrop-blur-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
@@ -297,7 +237,6 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Live counter decoration */}
         <div className="hero-item mt-16 grid grid-cols-3 gap-8 text-center">
           {[["∞", "Sites monitored"], ["1min", "Min interval"], ["100%", "Free to use"]].map(([val, label]) => (
             <div key={label}>
@@ -308,7 +247,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
       <section ref={featRef} className="relative z-10 px-6 pb-24 max-w-5xl mx-auto w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map(({ icon: Icon, title, desc }) => (
@@ -323,7 +261,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-6 text-center text-xs text-text-muted backdrop-blur-sm bg-bg/20">
         PingNexa — open & free
       </footer>
