@@ -22,7 +22,7 @@ export default function ConfirmDialog({ title, message, onConfirm, onCancel }: P
   }, []);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div ref={ref} className="glass-card rounded-2xl p-6 max-w-sm w-full border border-error/30 shadow-card">
         <div className="flex items-start gap-3 mb-4">
           <div className="p-2 rounded-xl bg-error/10 border border-error/20">

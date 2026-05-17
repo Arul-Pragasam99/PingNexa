@@ -47,7 +47,7 @@ export default function AddMonitorModal({ onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
       <div ref={modalRef} className="glass-card rounded-2xl w-full max-w-lg border border-border shadow-card">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">

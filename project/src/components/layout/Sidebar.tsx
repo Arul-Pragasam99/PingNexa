@@ -37,6 +37,7 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
         <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
+          style={{ fontFamily: "'Lato', sans-serif" }}
         />
       )}
 
@@ -47,10 +48,11 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
           "lg:static lg:translate-x-0 lg:w-56",
           open ? "translate-x-0" : "-translate-x-full"
         )}
+        style={{ fontFamily: "'Lato', sans-serif" }}
       >
         {/* Mobile close */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-border lg:hidden">
-          <span className="font-bold text-sm">Menu</span>
+          <span className="font-bold text-sm" style={{ fontFamily: "'Lato', sans-serif" }}>Menu</span>
           <button onClick={onClose} className="p-1.5 rounded-lg text-text-muted hover:text-text hover:bg-card">
             <X className="w-4 h-4" />
           </button>
@@ -68,6 +70,7 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
                   ? "bg-accent/10 text-accent border border-accent/20"
                   : "text-text-muted hover:text-text hover:bg-card"
               )}
+              style={{ fontFamily: "'Lato', sans-serif" }}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
               {label}
@@ -80,6 +83,7 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-muted hover:text-error hover:bg-error/5 transition-all"
+            style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <LogOut className="w-4 h-4" />
             Sign out

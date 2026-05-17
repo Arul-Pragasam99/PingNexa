@@ -54,13 +54,13 @@ export default function DashboardHome({ onViewMonitors, onOpenDetail }: Props) {
   ).slice(0, 5);
 
   return (
-    <div ref={pageRef} className="max-w-5xl mx-auto space-y-8">
+    <div ref={pageRef} className="max-w-5xl mx-auto space-y-8" style={{ fontFamily: "'Lato', sans-serif" }}>
       {/* Welcome */}
       <div className="dash-item">
-        <h1 className="text-2xl font-extrabold">
+        <h1 className="text-2xl font-extrabold" style={{ fontFamily: "'Lato', sans-serif" }}>
           Welcome back, {profile?.name?.split(" ")[0] ?? "there"} 👋
         </h1>
-        <p className="text-text-muted text-sm mt-1">
+        <p className="text-text-muted text-sm mt-1" style={{ fontFamily: "'Lato', sans-serif" }}>
           {total === 0
             ? "You have no monitors yet. Add your first site below."
             : `Monitoring ${total} site${total !== 1 ? "s" : ""}. ${down > 0 ? `⚠️ ${down} down.` : "All good ✓"}`}
@@ -70,30 +70,31 @@ export default function DashboardHome({ onViewMonitors, onOpenDetail }: Props) {
       {/* Stats grid */}
       <div className="dash-item grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {stats.map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="glass-card glow-border rounded-2xl p-4">
+          <div key={label} className="glass-card glow-border rounded-2xl p-4" style={{ fontFamily: "'Lato', sans-serif" }}>
             <Icon className={cn("w-4 h-4 mb-2", color)} />
-            <div className="text-xl font-extrabold font-mono">{value}</div>
-            <div className="text-[11px] text-text-muted mt-0.5 leading-tight">{label}</div>
+            <div className="text-xl font-extrabold font-mono" style={{ fontFamily: "'Lato', sans-serif" }}>{value}</div>
+            <div className="text-[11px] text-text-muted mt-0.5 leading-tight" style={{ fontFamily: "'Lato', sans-serif" }}>{label}</div>
           </div>
         ))}
       </div>
 
       {/* Recent activity */}
-      <div className="dash-item glass-card rounded-2xl overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <h2 className="font-bold text-sm">Recent Monitors</h2>
+      <div className="dash-item glass-card rounded-2xl overflow-hidden" style={{ fontFamily: "'Lato', sans-serif" }}>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border" style={{ fontFamily: "'Lato', sans-serif" }}>
+          <h2 className="font-bold text-sm" style={{ fontFamily: "'Lato', sans-serif" }}>Recent Monitors</h2>
           <button
             onClick={onViewMonitors}
             className="flex items-center gap-1 text-xs text-accent hover:text-accent-dim transition-colors"
+            style={{ fontFamily: "'Lato', sans-serif" }}
           >
             View all <ArrowRight className="w-3 h-3" />
           </button>
         </div>
 
         {recent.length === 0 ? (
-          <div className="px-5 py-12 text-center text-text-muted text-sm">
+          <div className="px-5 py-12 text-center text-text-muted text-sm" style={{ fontFamily: "'Lato', sans-serif" }}>
             No monitors yet.{" "}
-            <button onClick={onViewMonitors} className="text-accent underline underline-offset-2">
+            <button onClick={onViewMonitors} className="text-accent underline underline-offset-2" style={{ fontFamily: "'Lato', sans-serif" }}>
               Add one
             </button>
           </div>
@@ -104,15 +105,16 @@ export default function DashboardHome({ onViewMonitors, onOpenDetail }: Props) {
                 key={m.id}
                 onClick={() => onOpenDetail(m.id)}
                 className="w-full flex items-center gap-4 px-5 py-3.5 hover:bg-card/50 transition-colors text-left group"
+                style={{ fontFamily: "'Lato', sans-serif" }}
               >
                 <StatusBadge status={m.status} showLabel={false} />
                 <div className="flex-1 min-w-0">
-                  <div className="font-semibold text-sm truncate group-hover:text-accent transition-colors">{m.name}</div>
-                  <div className="text-xs text-text-muted truncate font-mono">{m.url}</div>
+                  <div className="font-semibold text-sm truncate group-hover:text-accent transition-colors" style={{ fontFamily: "'Lato', sans-serif" }}>{m.name}</div>
+                  <div className="text-xs text-text-muted truncate font-mono" style={{ fontFamily: "'Lato', sans-serif" }}>{m.url}</div>
                 </div>
                 <div className="flex items-center gap-4 flex-shrink-0 text-xs text-text-muted">
-                  <span className="font-mono">{formatLatency(m.lastLatencyMs)}</span>
-                  <span>{timeAgo(m.lastCheckedAt)}</span>
+                  <span className="font-mono" style={{ fontFamily: "'Lato', sans-serif" }}>{formatLatency(m.lastLatencyMs)}</span>
+                  <span style={{ fontFamily: "'Lato', sans-serif" }}>{timeAgo(m.lastCheckedAt)}</span>
                   <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 text-accent transition-opacity" />
                 </div>
               </button>

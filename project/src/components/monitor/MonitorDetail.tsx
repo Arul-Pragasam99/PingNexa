@@ -82,7 +82,7 @@ export default function MonitorDetail({ monitorId, onBack }: Props) {
   }
 
   return (
-    <div ref={pageRef} className="max-w-4xl mx-auto space-y-6">
+    <div ref={pageRef} style={{ fontFamily: "'Lato', sans-serif" }} className="max-w-4xl mx-auto space-y-6">
       {/* Back + title */}
       <div className="detail-item flex items-center gap-4">
         <button

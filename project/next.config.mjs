@@ -6,6 +6,22 @@ const nextConfig = {
       { protocol: "https", hostname: "*.googleusercontent.com" },
     ],
   },
+  // Turbopack configuration for Next.js 16
+  turbopack: {
+    resolveAlias: {
+      // Helps with file watching on Windows
+    },
+  },
+  // Alternative webpack config (fallback)
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

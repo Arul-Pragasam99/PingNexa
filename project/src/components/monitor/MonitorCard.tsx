@@ -18,7 +18,7 @@ export default function MonitorCard({ monitor, onOpenDetail }: Props) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
-    <div className="glass-card glow-border rounded-2xl px-5 py-4 flex items-center gap-4 group">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="glass-card glow-border rounded-2xl px-5 py-4 flex items-center gap-4 group">
       {/* Status */}
       <StatusBadge status={monitor.status} />
 

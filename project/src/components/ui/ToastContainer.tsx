@@ -53,7 +53,7 @@ function ToastItem({ toast, onDismiss }: { toast: Toast; onDismiss: () => void }
 export default function ToastContainer() {
   const { toasts, dismiss } = useToast();
   return (
-    <div className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 items-end">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="fixed bottom-5 right-5 z-[100] flex flex-col gap-2 items-end">
       {toasts.map((t) => (
         <ToastItem key={t.id} toast={t} onDismiss={() => dismiss(t.id)} />
       ))}

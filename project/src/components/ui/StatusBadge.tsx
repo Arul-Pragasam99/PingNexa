@@ -22,7 +22,7 @@ export default function StatusBadge({ status, showLabel = true, size = "md" }: P
   const pulse   = status === "up" || status === "down";
 
   return (
-    <div className="flex items-center gap-2 flex-shrink-0">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="flex items-center gap-2 flex-shrink-0">
       <div className="relative flex items-center justify-center">
         {pulse && (
           <span className={cn("absolute rounded-full animate-ping", dotSize, ring)} />

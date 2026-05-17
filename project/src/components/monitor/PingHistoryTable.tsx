@@ -15,7 +15,7 @@ const ResultIcon = ({ result }: { result: PingLog["result"] }) => {
 
 export default function PingHistoryTable({ logs, loading }: Props) {
   return (
-    <div className="glass-card rounded-2xl overflow-hidden">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="glass-card rounded-2xl overflow-hidden">
       <div className="flex items-center gap-2 px-5 py-4 border-b border-border">
         <Wifi className="w-4 h-4 text-accent" />
         <h2 className="font-bold text-sm">Ping History</h2>

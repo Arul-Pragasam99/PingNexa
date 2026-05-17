@@ -40,7 +40,7 @@ export default function EditMonitorForm({ monitor, onDone }: Props) {
   };
 
   return (
-    <div className="px-5 py-5 space-y-4">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="px-5 py-5 space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs font-semibold text-text-muted mb-1.5">Name</label>

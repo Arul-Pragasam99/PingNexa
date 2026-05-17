@@ -35,7 +35,7 @@ export default function MonitorList({ onOpenDetail }: Props) {
   );
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="max-w-5xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>

@@ -23,7 +23,7 @@ export default function DashboardLayout() {
   const backToList = () => { setView("monitors"); setDetailId(null); };
 
   return (
-    <div className="min-h-dvh bg-bg bg-grid flex flex-col">
+    <div className="min-h-dvh bg-bg bg-grid flex flex-col" style={{ fontFamily: "'Lato', sans-serif" }}>
       <Navbar
         onMenuClick={() => setSidebarOpen(true)}
         onProfileClick={() => setView("profile")}
@@ -37,7 +37,7 @@ export default function DashboardLayout() {
           currentView={view}
           setView={setView}
         />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0" style={{ fontFamily: "'Lato', sans-serif" }}>
           {view === "home"     && <DashboardHome onViewMonitors={() => setView("monitors")} onOpenDetail={openDetail} />}
           {view === "monitors" && <MonitorList onOpenDetail={openDetail} />}
           {view === "detail"   && detailId && <MonitorDetail monitorId={detailId} onBack={backToList} />}

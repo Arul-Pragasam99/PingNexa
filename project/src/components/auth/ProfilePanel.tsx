@@ -31,16 +31,17 @@ export default function ProfilePanel({ onBack }: Props) {
   const paused = monitors.filter((m) => m.isPaused).length;
 
   return (
-    <div ref={pageRef} className="max-w-2xl mx-auto space-y-6">
+    <div ref={pageRef} className="max-w-2xl mx-auto space-y-6" style={{ fontFamily: "'Lato', sans-serif" }}>
       {/* Back */}
       <div className="prof-item flex items-center gap-3">
         <button
           onClick={onBack}
           className="p-2 rounded-xl border border-border text-text-muted hover:text-text hover:border-accent/30 transition-all"
+          style={{ fontFamily: "'Lato', sans-serif" }}
         >
           <ArrowLeft className="w-4 h-4" />
         </button>
-        <h1 className="text-2xl font-extrabold">Profile</h1>
+        <h1 className="text-2xl font-extrabold" style={{ fontFamily: "'Lato', sans-serif" }}>Profile</h1>
       </div>
 
       {/* Avatar + name */}
@@ -53,12 +54,12 @@ export default function ProfilePanel({ onBack }: Props) {
           </div>
         )}
         <div>
-          <h2 className="text-xl font-extrabold">{profile?.name ?? "Anonymous"}</h2>
-          <div className="flex items-center gap-1.5 text-text-muted text-sm mt-1">
+          <h2 className="text-xl font-extrabold" style={{ fontFamily: "'Lato', sans-serif" }}>{profile?.name ?? "Anonymous"}</h2>
+          <div className="flex items-center gap-1.5 text-text-muted text-sm mt-1" style={{ fontFamily: "'Lato', sans-serif" }}>
             <Mail className="w-3.5 h-3.5" />
             {profile?.email}
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-text-muted mt-1">
+          <div className="flex items-center gap-1.5 text-xs text-text-muted mt-1" style={{ fontFamily: "'Lato', sans-serif" }}>
             <Shield className="w-3 h-3" />
             Signed in via Google
           </div>
@@ -68,7 +69,7 @@ export default function ProfilePanel({ onBack }: Props) {
       {/* Account info */}
       <div className="prof-item glass-card rounded-2xl overflow-hidden">
         <div className="px-5 py-4 border-b border-border">
-          <h3 className="font-bold text-sm">Account Details</h3>
+          <h3 className="font-bold text-sm" style={{ fontFamily: "'Lato', sans-serif" }}>Account Details</h3>
         </div>
         <div className="divide-y divide-border/50">
           {[
@@ -79,8 +80,8 @@ export default function ProfilePanel({ onBack }: Props) {
           ].map(({ label, value, icon: Icon }) => (
             <div key={label} className="flex items-center gap-4 px-5 py-3.5">
               <Icon className="w-4 h-4 text-text-muted flex-shrink-0" />
-              <span className="text-text-muted text-sm w-32 flex-shrink-0">{label}</span>
-              <span className="font-mono text-sm truncate">{value ?? "—"}</span>
+              <span className="text-text-muted text-sm w-32 flex-shrink-0" style={{ fontFamily: "'Lato', sans-serif" }}>{label}</span>
+              <span className="font-mono text-sm truncate" style={{ fontFamily: "'Lato', sans-serif" }}>{value ?? "—"}</span>
             </div>
           ))}
         </div>
@@ -94,8 +95,8 @@ export default function ProfilePanel({ onBack }: Props) {
           { label: "Paused", value: paused,              color: "text-warn" },
         ].map(({ label, value, color }) => (
           <div key={label} className="glass-card rounded-xl p-4 text-center">
-            <div className={`text-2xl font-extrabold font-mono ${color}`}>{value}</div>
-            <div className="text-xs text-text-muted mt-1">{label}</div>
+            <div className={`text-2xl font-extrabold font-mono ${color}`} style={{ fontFamily: "'Lato', sans-serif" }}>{value}</div>
+            <div className="text-xs text-text-muted mt-1" style={{ fontFamily: "'Lato', sans-serif" }}>{label}</div>
           </div>
         ))}
       </div>
@@ -105,6 +106,7 @@ export default function ProfilePanel({ onBack }: Props) {
         <button
           onClick={signOutUser}
           className="w-full py-3 rounded-2xl border border-error/30 text-error text-sm font-bold hover:bg-error/5 transition-all"
+          style={{ fontFamily: "'Lato', sans-serif" }}
         >
           Sign Out
         </button>

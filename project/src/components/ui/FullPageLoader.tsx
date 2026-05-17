@@ -4,7 +4,7 @@ import { Activity } from "lucide-react";
 
 export default function FullPageLoader() {
   return (
-    <div className="min-h-dvh bg-bg flex items-center justify-center">
+    <div style={{ fontFamily: "'Lato', sans-serif" }} className="min-h-dvh bg-bg flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
         <div className="relative">
           <div className="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center">
