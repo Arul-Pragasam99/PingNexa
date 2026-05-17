@@ -28,6 +28,12 @@ export const metadata: Metadata = {
     description: "Keep your Render apps awake with intelligent pinging.",
     type:        "website",
   },
+  // ✅ Favicon config
+  icons: {
+    icon:     "/icons/PingNexa.png",
+    shortcut: "/icons/PingNexa.png",
+    apple:    "/icons/PingNexa.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -35,12 +41,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html 
       lang="en" 
       className={`${syne.variable} ${geistMono.variable}`}
-      suppressHydrationWarning  // Add this line
+      suppressHydrationWarning
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0ea5a4" />
-        <link rel="apple-touch-icon" href="/icons/icon-192.svg" />
+        {/* ✅ Favicon */}
+        <link rel="icon" href="/icons/PingNexa.png" type="image/png" />
+        {/* Apple touch icon */}
+        <link rel="apple-touch-icon" href="/icons/PingNexa.png" />
       </head>
       <body className="font-sans bg-bg text-text antialiased">
         <ToastProvider>
