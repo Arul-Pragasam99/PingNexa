@@ -16,7 +16,6 @@ export default function DashboardLayout() {
   const [detailId,   setDetailId]   = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Boot the ping scheduler — runs for all active monitors
   usePingScheduler();
 
   const openDetail = (id: string) => { setDetailId(id); setView("detail"); };
@@ -30,14 +29,14 @@ export default function DashboardLayout() {
         currentView={view}
         setView={setView}
       />
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1 relative gap-4 p-4">
         <Sidebar
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
           currentView={view}
           setView={setView}
         />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0" style={{ fontFamily: "'Lato', sans-serif" }}>
+        <main className="flex-1 min-w-0" style={{ fontFamily: "'Lato', sans-serif" }}>
           {view === "home"     && <DashboardHome onViewMonitors={() => setView("monitors")} onOpenDetail={openDetail} />}
           {view === "monitors" && <MonitorList onOpenDetail={openDetail} />}
           {view === "detail"   && detailId && <MonitorDetail monitorId={detailId} onBack={backToList} />}

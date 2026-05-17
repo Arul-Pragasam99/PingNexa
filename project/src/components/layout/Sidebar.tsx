@@ -7,16 +7,16 @@ import { cn }         from "@/lib/utils";
 import type { DashView } from "./DashboardLayout";
 
 interface Props {
-  open:       boolean;
-  onClose:    () => void;
+  open:        boolean;
+  onClose:     () => void;
   currentView: DashView;
-  setView:    (v: DashView) => void;
+  setView:     (v: DashView) => void;
 }
 
 const navItems = [
-  { id: "home"     as DashView, label: "Dashboard",  icon: LayoutDashboard },
-  { id: "monitors" as DashView, label: "Monitors",   icon: Radio },
-  { id: "profile"  as DashView, label: "Profile",    icon: User },
+  { id: "home"     as DashView, label: "Dashboard", icon: LayoutDashboard },
+  { id: "monitors" as DashView, label: "Monitors",  icon: Radio },
+  { id: "profile"  as DashView, label: "Profile",   icon: User },
 ];
 
 export default function Sidebar({ open, onClose, currentView, setView }: Props) {
@@ -37,28 +37,33 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
         <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
-          style={{ fontFamily: "'Lato', sans-serif" }}
         />
       )}
 
       {/* Sidebar panel */}
       <aside
         className={cn(
-          "fixed top-0 left-0 h-full z-50 w-60 bg-surface border-r border-border flex flex-col transition-transform duration-300 ease-in-out",
-          "lg:static lg:translate-x-0 lg:w-56",
+          // Mobile: full-height slide-in from left
+          "fixed top-0 left-0 h-full z-50 w-60 flex flex-col transition-transform duration-300 ease-in-out",
+          "bg-surface border border-border",
+          // Desktop: floating card
+          "lg:static lg:translate-x-0 lg:w-56 lg:rounded-2xl lg:h-auto lg:self-start lg:sticky lg:top-4",
           open ? "translate-x-0" : "-translate-x-full"
         )}
         style={{ fontFamily: "'Lato', sans-serif" }}
       >
-        {/* Mobile close */}
+        {/* Mobile close button */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-border lg:hidden">
-          <span className="font-bold text-sm" style={{ fontFamily: "'Lato', sans-serif" }}>Menu</span>
-          <button onClick={onClose} className="p-1.5 rounded-lg text-text-muted hover:text-text hover:bg-card">
+          <span className="font-bold text-sm">Menu</span>
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-text-muted hover:text-text hover:bg-card"
+          >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Nav */}
+        {/* Nav items */}
         <nav className="flex-1 p-3 space-y-1 pt-6">
           {navItems.map(({ id, label, icon: Icon }) => (
             <button
@@ -70,7 +75,6 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
                   ? "bg-accent/10 text-accent border border-accent/20"
                   : "text-text-muted hover:text-text hover:bg-card"
               )}
-              style={{ fontFamily: "'Lato', sans-serif" }}
             >
               <Icon className="w-4 h-4 flex-shrink-0" />
               {label}
@@ -83,7 +87,6 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
           <button
             onClick={handleSignOut}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-muted hover:text-error hover:bg-error/5 transition-all"
-            style={{ fontFamily: "'Lato', sans-serif" }}
           >
             <LogOut className="w-4 h-4" />
             Sign out
