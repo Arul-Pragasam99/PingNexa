@@ -9,7 +9,7 @@ import { useToast } from "@/context/ToastContext";
 const features = [
   { icon: Zap,      title: "Custom Intervals",   desc: "Ping every minute to every 24 hours. You control the schedule." },
   { icon: Activity, title: "Live Status",        desc: "Real-time latency tracking and uptime percentages per monitor." },
-  { icon: Shield,   title: "Secure by Default",  desc: "Google Sign-In via Firebase. Your data belongs to you only." },
+  { icon: Shield,   title: "Secure by Default",  desc: "Secure authentication. Your data belongs to you only." },
   { icon: Clock,    title: "Full History",        desc: "Every ping logged with timestamp, latency, and HTTP status code." },
 ];
 
@@ -245,9 +245,8 @@ export default function LandingPage() {
       </nav>
 
       <section ref={heroRef} className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-24">
-        <div className="hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-mono mb-8 backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          Built for Render free-tier apps
+        <div className="hero-item inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/40 bg-accent/5 text-accent text-xs font-mono mb-8 backdrop-blur-sm">
+          🚀 99.9% Uptime Guaranteed
         </div>
 
         <h1 className="hero-item text-5xl sm:text-7xl font-extrabold tracking-tight leading-none mb-6 max-w-3xl">
@@ -259,7 +258,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="hero-item text-lg text-text-muted max-w-xl mb-10 leading-relaxed">
-          PingNexa pings your free-tier sites on a custom schedule — so they never
+          PingNexa pings your sites on a custom schedule — so they never
           go to sleep when you need them most.
         </p>
 
