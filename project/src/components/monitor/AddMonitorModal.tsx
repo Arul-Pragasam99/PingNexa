@@ -68,7 +68,7 @@ export default function AddMonitorModal({ onClose }: Props) {
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="My Render App"
+              placeholder="My App"
               className="w-full px-3.5 py-2.5 bg-bg border border-border rounded-xl text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent/40 transition-colors"
             />
           </div>
