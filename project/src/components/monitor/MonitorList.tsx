@@ -38,53 +38,60 @@ export default function MonitorList({ onOpenDetail }: Props) {
 
   return (
     <div style={{ fontFamily: "'Lato', sans-serif" }} className="max-w-5xl mx-auto space-y-6">
-      {/* Header */}
+      {/* ── Header ── */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold">Monitors</h1>
-          <p className="text-text-muted text-sm mt-0.5">{monitors.length} total · pinging automatically</p>
+          <h1 className="text-2xl font-extrabold text-white">Monitors</h1>
+          <p className="text-white/40 text-sm mt-0.5">
+            {monitors.length} total · pinging automatically
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={refresh}
-            className="p-2 rounded-xl border border-border text-text-muted hover:text-text hover:border-accent/30 transition-all"
+            className="p-2 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-cyan-400/30 transition-all"
             title="Refresh"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-accent text-bg rounded-xl text-sm font-bold hover:bg-accent-dim transition-all shadow-glow_sm"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+            style={{
+              background: "linear-gradient(135deg, #00e5ff, #0ff5d4)",
+              color: "#04070f",
+              boxShadow: "0 0 16px rgba(0,229,255,0.3)",
+            }}
           >
             <Plus className="w-4 h-4" /> Add Monitor
           </button>
         </div>
       </div>
 
-      {/* Search */}
+      {/* ── Search ── */}
       {monitors.length > 4 && (
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search monitors…"
-            className="w-full pl-9 pr-4 py-2.5 bg-card border border-border rounded-xl text-sm text-text placeholder:text-text-muted focus:outline-none focus:border-accent/40 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-cyan-400/40 transition-all"
           />
         </div>
       )}
 
-      {/* List */}
+      {/* ── List ── */}
       <div ref={listRef} className="space-y-3">
         {loading ? (
           Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
         ) : filtered.length === 0 ? (
           <div className="glass-card rounded-2xl py-20 text-center">
             <div className="text-4xl mb-3">📡</div>
-            <h3 className="font-bold mb-2">
+            <h3 className="font-bold mb-2 text-white">
               {monitors.length === 0 ? "No monitors yet" : "No results found"}
             </h3>
-            <p className="text-text-muted text-sm mb-6">
+            <p className="text-white/40 text-sm mb-6">
               {monitors.length === 0
                 ? "Add your first site to start pinging."
                 : "Try a different search term."}
@@ -92,7 +99,11 @@ export default function MonitorList({ onOpenDetail }: Props) {
             {monitors.length === 0 && (
               <button
                 onClick={() => setShowAdd(true)}
-                className="px-6 py-2.5 bg-accent text-bg rounded-xl text-sm font-bold hover:bg-accent-dim transition-all"
+                className="px-6 py-2.5 rounded-xl text-sm font-bold transition-all"
+                style={{
+                  background: "linear-gradient(135deg, #00e5ff, #0ff5d4)",
+                  color: "#04070f",
+                }}
               >
                 Add Monitor
               </button>
