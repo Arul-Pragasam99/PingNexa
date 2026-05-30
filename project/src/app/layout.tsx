@@ -7,6 +7,8 @@ import { ToastProvider }    from "@/context/ToastContext";
 import { MonitorsProvider } from "@/context/MonitorsContext";
 import ToastContainer       from "@/components/ui/ToastContainer";
 import RegisterSW           from "@/components/pwa/RegisterSW";
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next"
 
 const syne = Syne({
   subsets:  ["latin"],
