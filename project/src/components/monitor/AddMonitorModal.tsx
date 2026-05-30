@@ -54,13 +54,27 @@ export default function AddMonitorModal({ onClose }: Props) {
 
   return (
     <div
-      style={{ fontFamily: "'Lato', sans-serif" }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+      style={{
+        fontFamily: "'Lato', sans-serif",
+        position: "fixed",
+        inset: 0,
+        zIndex: 9999,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+        background: "transparent",
+        pointerEvents: "none",
+      }}
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-        style={{ background: "rgba(6, 14, 28, 0.92)", backdropFilter: "blur(24px)" }}
+        className="w-full max-w-lg rounded-2xl border border-white/10 overflow-hidden"
+        style={{
+          background: "rgba(6, 14, 28, 0.97)",
+          pointerEvents: "auto",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)",
+        }}
       >
         {/* ── Header ── */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
@@ -95,7 +109,7 @@ export default function AddMonitorModal({ onClose }: Props) {
             <input
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://myapp.onrender.com"
+              placeholder="My Website"
               className={`${inputCls} font-mono`}
             />
           </div>

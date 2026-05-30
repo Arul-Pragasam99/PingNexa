@@ -1,9 +1,8 @@
 "use client";
 // components/layout/Sidebar.tsx
 import { LayoutDashboard, Radio, User, X, LogOut } from "lucide-react";
-import { useAuth }    from "@/context/AuthContext";
-import { useToast }   from "@/context/ToastContext";
-import { cn }         from "@/lib/utils";
+import { useAuth }  from "@/context/AuthContext";
+import { useToast } from "@/context/ToastContext";
 import type { DashView } from "./DashboardLayout";
 
 interface Props {
@@ -24,74 +23,158 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
   const { showToast }   = useToast();
 
   const handleNav = (v: DashView) => { setView(v); onClose(); };
+  const handleSignOut = async () => { await signOutUser(); showToast("Signed out", "info"); };
 
-  const handleSignOut = async () => {
-    await signOutUser();
-    showToast("Signed out", "info");
-  };
+  const isActive = (id: DashView) =>
+    currentView === id || (currentView === "detail" && id === "monitors");
+
+  const navBtnStyle = (id: DashView): React.CSSProperties => ({
+    width: "100%", display: "flex", alignItems: "center", gap: "0.75rem",
+    padding: "0.625rem 0.75rem", borderRadius: "0.75rem",
+    fontSize: "0.875rem", fontWeight: 500, cursor: "pointer",
+    border: isActive(id) ? "1px solid rgba(0,229,255,0.2)" : "1px solid transparent",
+    background: isActive(id) ? "rgba(0,229,255,0.08)" : "transparent",
+    color: isActive(id) ? "#00e5ff" : "rgba(255,255,255,0.5)",
+    transition: "all 0.15s",
+    fontFamily: "'Lato', sans-serif",
+  });
+
+  const sidebarContent = (
+    <aside
+      style={{
+        width: "13rem",
+        flexShrink: 0,
+        display: "flex",
+        flexDirection: "column",
+        background: "rgba(6, 12, 28, 0.95)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        borderRadius: "1rem",
+        fontFamily: "'Lato', sans-serif",
+        alignSelf: "flex-start",
+        position: "sticky",
+        top: "1rem",
+      }}
+    >
+      <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+        {navItems.map(({ id, label, icon: Icon }) => (
+          <button key={id} onClick={() => handleNav(id)} style={navBtnStyle(id)}>
+            <Icon style={{ width: "1rem", height: "1rem", flexShrink: 0 }} />
+            {label}
+          </button>
+        ))}
+      </nav>
+
+      <div style={{ padding: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <button
+          onClick={handleSignOut}
+          style={{
+            width: "100%", display: "flex", alignItems: "center", gap: "0.75rem",
+            padding: "0.625rem 0.75rem", borderRadius: "0.75rem",
+            fontSize: "0.875rem", fontWeight: 500,
+            color: "rgba(255,255,255,0.4)",
+            background: "transparent", border: "none", cursor: "pointer",
+            fontFamily: "'Lato', sans-serif",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "#f87171";
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(239,68,68,0.05)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLButtonElement).style.color = "rgba(255,255,255,0.4)";
+            (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+          }}
+        >
+          <LogOut style={{ width: "1rem", height: "1rem" }} />
+          Sign out
+        </button>
+      </div>
+    </aside>
+  );
 
   return (
     <>
-      {/* Mobile overlay */}
-      {open && (
-        <div
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-          onClick={onClose}
-        />
-      )}
+      {/* ── DESKTOP: always visible static sidebar ── */}
+      <div className="hidden lg:block">
+        {sidebarContent}
+      </div>
 
-      {/* Sidebar panel */}
-      <aside
-        className={cn(
-          "fixed top-0 left-0 h-full z-50 w-60 flex flex-col transition-transform duration-300 ease-in-out",
-          "bg-surface border border-border",
-          // ✅ lg:static removed — it conflicts with lg:sticky
-          "lg:translate-x-0 lg:w-56 lg:rounded-2xl lg:h-auto lg:self-start lg:sticky lg:top-4",
-          open ? "translate-x-0" : "-translate-x-full"
-        )}
-        style={{ fontFamily: "'Lato', sans-serif" }}
-      >
-        {/* Mobile close button */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-border lg:hidden">
-          <span className="font-bold text-sm">Menu</span>
-          <button
+      {/* ── MOBILE: slide-in drawer + backdrop ── */}
+      <div className="lg:hidden">
+        {/* Backdrop */}
+        {open && (
+          <div
             onClick={onClose}
-            className="p-1.5 rounded-lg text-text-muted hover:text-text hover:bg-card"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
+            style={{
+              position: "fixed", inset: 0, zIndex: 40,
+              background: "rgba(0,0,0,0.6)",
+              backdropFilter: "blur(4px)",
+            }}
+          />
+        )}
 
-        {/* Nav items */}
-        <nav className="flex-1 p-3 space-y-1 pt-6">
-          {navItems.map(({ id, label, icon: Icon }) => (
+        {/* Drawer panel */}
+        <div
+          style={{
+            position: "fixed", top: 0, left: 0,
+            height: "100%", width: "15rem",
+            zIndex: 50,
+            transform: open ? "translateX(0)" : "translateX(-100%)",
+            transition: "transform 0.3s ease-in-out",
+            display: "flex", flexDirection: "column",
+            background: "rgba(6, 12, 28, 0.98)",
+            borderRight: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
+          {/* Mobile header */}
+          <div style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            padding: "1rem 1rem",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+          }}>
+            <span style={{ fontWeight: 700, fontSize: "0.875rem", color: "#fff", fontFamily: "'Lato', sans-serif" }}>
+              Menu
+            </span>
             <button
-              key={id}
-              onClick={() => handleNav(id)}
-              className={cn(
-                "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
-                currentView === id || (currentView === "detail" && id === "monitors")
-                  ? "bg-accent/10 text-accent border border-accent/20"
-                  : "text-text-muted hover:text-text hover:bg-card"
-              )}
+              onClick={onClose}
+              style={{
+                padding: "0.375rem", borderRadius: "0.5rem", border: "none",
+                color: "rgba(255,255,255,0.4)", background: "transparent", cursor: "pointer",
+                display: "flex", alignItems: "center",
+              }}
             >
-              <Icon className="w-4 h-4 flex-shrink-0" />
-              {label}
+              <X style={{ width: "1rem", height: "1rem" }} />
             </button>
-          ))}
-        </nav>
+          </div>
 
-        {/* Sign out */}
-        <div className="p-3 border-t border-border">
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-text-muted hover:text-error hover:bg-error/5 transition-all"
-          >
-            <LogOut className="w-4 h-4" />
-            Sign out
-          </button>
+          {/* Mobile nav */}
+          <nav style={{ flex: 1, padding: "0.75rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            {navItems.map(({ id, label, icon: Icon }) => (
+              <button key={id} onClick={() => handleNav(id)} style={navBtnStyle(id)}>
+                <Icon style={{ width: "1rem", height: "1rem", flexShrink: 0 }} />
+                {label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Mobile sign out */}
+          <div style={{ padding: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+            <button
+              onClick={handleSignOut}
+              style={{
+                width: "100%", display: "flex", alignItems: "center", gap: "0.75rem",
+                padding: "0.625rem 0.75rem", borderRadius: "0.75rem",
+                fontSize: "0.875rem", fontWeight: 500,
+                color: "rgba(255,255,255,0.4)",
+                background: "transparent", border: "none", cursor: "pointer",
+                fontFamily: "'Lato', sans-serif",
+              }}
+            >
+              <LogOut style={{ width: "1rem", height: "1rem" }} />
+              Sign out
+            </button>
+          </div>
         </div>
-      </aside>
+      </div>
     </>
   );
 }
