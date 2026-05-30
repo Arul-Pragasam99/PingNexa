@@ -18,15 +18,20 @@ export default function MonitorList({ onOpenDetail }: Props) {
 
   useEffect(() => {
     if (loading || !listRef.current) return;
+
+    const cards = listRef.current.querySelectorAll(".monitor-card");
+    if (cards.length === 0) return;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        listRef.current?.querySelectorAll(".monitor-card") ?? [],
+        gsap.utils.toArray(cards),
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power3.out" }
       );
     }, listRef);
+
     return () => ctx.revert();
-  }, [loading, monitors.length]);
+  }, [loading, monitors]);
 
   const filtered = monitors.filter(
     (m) =>
