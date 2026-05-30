@@ -43,11 +43,10 @@ export default function Sidebar({ open, onClose, currentView, setView }: Props) 
       {/* Sidebar panel */}
       <aside
         className={cn(
-          // Mobile: full-height slide-in from left
           "fixed top-0 left-0 h-full z-50 w-60 flex flex-col transition-transform duration-300 ease-in-out",
           "bg-surface border border-border",
-          // Desktop: floating card
-          "lg:static lg:translate-x-0 lg:w-56 lg:rounded-2xl lg:h-auto lg:self-start lg:sticky lg:top-4",
+          // ✅ lg:static removed — it conflicts with lg:sticky
+          "lg:translate-x-0 lg:w-56 lg:rounded-2xl lg:h-auto lg:self-start lg:sticky lg:top-4",
           open ? "translate-x-0" : "-translate-x-full"
         )}
         style={{ fontFamily: "'Lato', sans-serif" }}

@@ -43,12 +43,12 @@ const config: Config = {
       },
       keyframes: {
         shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
+          "0%":   { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition:  "200% 0" },
         },
         float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-10px)" },
+          "0%, 100%": { transform: "translateY(0px)"   },
+          "50%":      { transform: "translateY(-10px)" },
         },
       },
       backgroundImage: {
@@ -61,8 +61,8 @@ const config: Config = {
         grid: "60px 60px",
       },
       boxShadow: {
-        accent: "0 0 30px rgba(0,229,255,0.2), 0 0 60px rgba(0,229,255,0.05)",
-        card: "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)",
+        accent:  "0 0 30px rgba(0,229,255,0.2), 0 0 60px rgba(0,229,255,0.05)",
+        card:    "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)",
         glow_sm: "0 0 12px rgba(0,229,255,0.3)",
       },
     },

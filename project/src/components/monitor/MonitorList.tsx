@@ -18,10 +18,8 @@ export default function MonitorList({ onOpenDetail }: Props) {
 
   useEffect(() => {
     if (loading || !listRef.current) return;
-
     const cards = listRef.current.querySelectorAll(".monitor-card");
     if (cards.length === 0) return;
-
     const ctx = gsap.context(() => {
       gsap.fromTo(
         gsap.utils.toArray(cards),
@@ -29,9 +27,8 @@ export default function MonitorList({ onOpenDetail }: Props) {
         { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power3.out" }
       );
     }, listRef);
-
     return () => ctx.revert();
-  }, [loading, monitors]);
+  }, [loading, monitors.length]);
 
   const filtered = monitors.filter(
     (m) =>
