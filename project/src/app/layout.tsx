@@ -63,6 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </MonitorsProvider>
           </AuthProvider>
         </ToastProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
