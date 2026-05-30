@@ -1,4 +1,7 @@
-# PingNexa 📡
+# PingNexa <img width="24" height="24" alt="activity" src="https://github.com/user-attachments/assets/9239e099-c5b4-4d5e-8150-f74ab0462397" />
+
+
+
 
 PingNexa is a modern, free uptime monitoring dashboard built with Next.js, React, Tailwind CSS, and Firebase.
 
