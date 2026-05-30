@@ -116,7 +116,7 @@ export default function MonitorDetail({ monitorId, onBack }: Props) {
           <button
             onClick={handleManualPing}
             disabled={pinging || monitor.isPaused}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-xl border border-white/10 text-white/50 hover:text-cyan-400 hover:border-cyan-400/30 disabled:opacity-40 transition-all"
+            className="relative flex items-center gap-1.5 px-3 py-2 text-xs rounded-xl border border-white/10 text-white/50 hover:text-cyan-400 hover:border-cyan-400/30 disabled:opacity-100 transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,211,238,0.5)] hover:shadow-cyan-400/50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${pinging ? "animate-spin" : ""}`} />
             {pinging ? "Pinging…" : "Ping now"}
