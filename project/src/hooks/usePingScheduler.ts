@@ -54,29 +54,29 @@ export function usePingScheduler() {
 
     const active = monitors.filter((m) => !m.isPaused);
 
-    // Clear stale intervals
-    intervals.current.forEach((id, monId) => {
+    // Clear stale intervals - ADDED OPTIONAL CHAINING
+    intervals.current?.forEach((id, monId) => {
       if (!active.find((m) => m.id === monId)) {
         clearInterval(id);
-        intervals.current.delete(monId);
+        intervals.current?.delete(monId); // ADDED OPTIONAL CHAINING
       }
     });
 
     // Set up new intervals
     active.forEach((monitor) => {
-      if (intervals.current.has(monitor.id)) return; // already scheduled
+      if (intervals.current?.has(monitor.id)) return; // ADDED OPTIONAL CHAINING
       const ms = monitor.intervalMinutes * 60 * 1000;
 
       // Ping immediately on mount (don't wait for first interval)
       executePing(monitor);
 
       const id = setInterval(() => executePing(monitor), ms);
-      intervals.current.set(monitor.id, id);
+      intervals.current?.set(monitor.id, id); // ADDED OPTIONAL CHAINING
     });
 
     return () => {
-      intervals.current.forEach((id) => clearInterval(id));
-      intervals.current.clear();
+      intervals.current?.forEach((id) => clearInterval(id)); // ADDED OPTIONAL CHAINING
+      intervals.current?.clear(); // ADDED OPTIONAL CHAINING
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monitors, user]);
