@@ -1,7 +1,7 @@
 {
   "name": "PingNexa",
   "short_name": "PingNexa",
-  "description": "Modern uptime monitoring dashboard for tracking website and API availability, latency, and ping history",
+  "description": "Modern uptime monitoring dashboard for tracking website and API availability, latency and ping history",
   "id": "/",
   "start_url": "/",
   "display": "standalone",
