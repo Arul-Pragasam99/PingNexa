@@ -106,3 +106,349 @@
   opacity: 0;
   transform: translateY(20px);
 }
+
+/* ========================================
+   PWA ANIMATIONS & UTILITIES
+   ======================================== */
+
+/* PWA Animation Keyframes */
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.7;
+  }
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* PWA Animation Classes */
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+/* ========================================
+   PWA SAFE AREA UTILITIES
+   ======================================== */
+
+/* Safe area insets for mobile devices with notches */
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+  }
+  .safe-area-top {
+    padding-top: max(env(safe-area-inset-top), 1rem);
+  }
+  .safe-area-left {
+    padding-left: max(env(safe-area-inset-left), 1rem);
+  }
+  .safe-area-right {
+    padding-right: max(env(safe-area-inset-right), 1rem);
+  }
+}
+
+/* iOS specific safe areas */
+@supports (-webkit-touch-callout: none) {
+  .ios-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+  .ios-safe-top {
+    padding-top: env(safe-area-inset-top, 44px);
+  }
+}
+
+/* ========================================
+   PWA INTERACTION UTILITIES
+   ======================================== */
+
+/* Touch-friendly tap targets (minimum 44px for accessibility) */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Prevent text selection during PWA usage */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Prevent zoom on double tap (iOS) */
+.no-zoom {
+  touch-action: manipulation;
+}
+
+/* Smooth transitions for PWA */
+.pwa-transition {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Haptic feedback simulation */
+.haptic-feedback {
+  -webkit-tap-highlight-color: transparent;
+}
+.haptic-feedback:active {
+  transform: scale(0.97);
+  transition: transform 0.1s;
+}
+
+/* ========================================
+   PWA INSTALL BUTTON STYLES
+   ======================================== */
+
+.install-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.install-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer-button 2s infinite;
+}
+
+@keyframes shimmer-button {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ========================================
+   PWA OFFLINE INDICATOR
+   ======================================== */
+
+.offline-indicator {
+  background: rgba(220, 38, 38, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.online-indicator {
+  background: rgba(34, 197, 94, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ========================================
+   PWA SPLASH SCREEN (for iOS)
+   ======================================== */
+
+/* iOS splash screen (hidden by default, shown on load) */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #080d18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.5s ease-out;
+}
+
+.splash-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  animation: pulse-logo 2s ease-in-out infinite;
+}
+
+@keyframes pulse-logo {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.splash-loader {
+  margin-top: 2rem;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(14, 165, 164, 0.1);
+  border-top-color: #0ea5a4;
+  border-radius: 50%;
+  animation: spin-slow 0.8s linear infinite;
+}
+
+/* ========================================
+   PWA RESPONSIVE UTILITIES
+   ======================================== */
+
+/* PWA specific responsive adjustments */
+@media (display-mode: standalone) {
+  /* App is installed as PWA */
+  body {
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  
+  /* Hide browser UI elements in PWA mode */
+  .pwa-hidden-standalone {
+    display: none !important;
+  }
+}
+
+@media (display-mode: browser) {
+  /* App is in browser */
+  .pwa-hidden-browser {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   DARK MODE PWA SUPPORT
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  .pwa-dark-mode {
+    background: #080d18;
+    color: #e1e8f5;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .pwa-light-mode {
+    background: #ffffff;
+    color: #1a1a1a;
+  }
+}
+
+/* ========================================
+   PRINT STYLES FOR PWA
+   ======================================== */
+
+@media print {
+  .pwa-no-print {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   REDUCED MOTION PREFERENCE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .animate-slide-up,
+  .animate-fade-in,
+  .animate-pulse-dot,
+  .animate-spin-slow {
+    animation: none !important;
+  }
+}
+
+/* ========================================
+   FIREFOX & SAFARI SPECIFIC FIXES
+   ======================================== */
+
+/* Firefox scrollbar */
+@-moz-document url-prefix() {
+  .scrollbar-firefox {
+    scrollbar-width: thin;
+    scrollbar-color: #162035 #080d18;
+  }
+}
+
+/* Safari specific fixes */
+_::-webkit-full-page-media,
+_:future,
+:root .safari-fix {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ========================================
+   HIGH DPI DISPLAY SUPPORT
+   ======================================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .retina-border {
+    border-width: 0.5px;
+  }
+}
+
+/* ========================================
+   LANDSCAPE & PORTRAIT ORIENTATION
+   ======================================== */
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .landscape-compact {
+    padding: 0.5rem;
+  }
+}
+
+@media (orientation: portrait) {
+  .portrait-full {
+    height: 100vh;
+    height: 100dvh;
+  }
+}

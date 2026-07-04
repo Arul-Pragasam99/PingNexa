@@ -5,7 +5,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge"; // Fast Edge runtime
+// export const runtime = "edge"; // Fast Edge runtime
 
 export async function GET(req: NextRequest) {
   const url = req.nextUrl.searchParams.get("url");
